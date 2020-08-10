@@ -2,8 +2,8 @@
 
 #include <SoftwareSerial.h>
 
-#define rxPin 10
-#define txPin 11
+#define rxPin 0
+#define txPin 1
 
 SoftwareSerial RFID = SoftwareSerial(rxPin, txPin); 
 
