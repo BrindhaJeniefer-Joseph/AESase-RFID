@@ -2,12 +2,12 @@
 
 #include <SoftwareSerial.h>
 
-#define rxPin 0
-#define txPin 1
+#define rxPin 4
+#define txPin 2
 
 SoftwareSerial RFID = SoftwareSerial(rxPin, txPin); 
 
-int i;
+int id;
 
 void setup()
 {
@@ -19,8 +19,9 @@ void loop()
 {
   if (RFID.available() > 0) 
   {
-     i = RFID.read();
-     Serial.print(i, DEC);
+     Serial.print("yes");
+     id = RFID.read();
+     Serial.print(id, DEC);
      Serial.print(" ");
   }
 }
