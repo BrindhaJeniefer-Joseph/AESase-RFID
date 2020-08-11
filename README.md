@@ -18,18 +18,18 @@ Please refer the block diagram in AESase-RFID-Josephrexon/Architecture
 # Hardware connections
 
 1. Connect Pro mini to USB/UART converter.
-    a) USB/UART TTL Converter used here is 6 pins.
-    b) USB to PC.
+    1. USB/UART TTL Converter used here is 6 pins.
+    2. USB to PC.
     
-    c) DTR -> DTR ( of pro mini)
-    d) Tx -> Rx (of pro mini)
-    e) Rx -> Tx
-    f) Vcc -> Vcc
-    g) GND -> GND
+    3. DTR -> DTR ( of pro mini)
+    4. Tx -> Rx (of pro mini)
+    5. Rx -> Tx
+    6. Vcc -> Vcc
+    7. GND -> GND
     
  2. Connect RFID reader to Pro mini
-    a) Vcc -> Vcc (of RFID)
-    b) GND -> GND (of RFID)
-    c) Digital pin 4 -> Tx (of RFID)  ----- Pin 4 of pro mini acts as input ( or receiver ) to receive RFID tag
-    d) Digital pin 2 -> Rx( of RFID) 
-    e) Antennas connected
+    1. Vcc -> Vcc (of RFID)
+    2. GND -> GND (of RFID)
+    3. Digital pin 4 -> Tx (of RFID)  ----- Pin 4 of pro mini acts as input ( or receiver ) to receive RFID tag
+    4. Digital pin 2 -> Rx( of RFID) 
+    5. Antennas connected
