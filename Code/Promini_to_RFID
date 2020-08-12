@@ -1,27 +1,112 @@
 // Checking whether arduino pro mini can communicate with RFID
 
-#include <SoftwareSerial.h>
 
+#include <SoftwareSerial.h>
 #define rxPin 4
 #define txPin 2
 
-SoftwareSerial RFID = SoftwareSerial(rxPin, txPin); 
+SoftwareSerial RFID(rxPin, txPin); // RX and TX
 
-int id;
+
+const int tag_size = 14; // RFID data frame is 14 byte 
+const int tagdata_size = 10; // RFID tag info 
+const int tagversion_size = 2; // RFID tag version
+const int tagdata = 8; // RFID tag data info
+const int tag_checksum_size = 2; //RFID frame checksum
+
+
+int id = 0 ;
+uint8_t buffer[tag_size]; 
 
 void setup()
 {
   RFID.begin(9600);    // start serial to RFID reader
   Serial.begin(9600);  // start serial to PC 
+  RFID.listen();
 }
 
 void loop()
 {
   if (RFID.available() > 0) 
   {
-     Serial.print("yes");
-     id = RFID.read();
-     Serial.print(id, DEC);
-     Serial.print(" ");
+     bool extract_tag = false;
+     int rfid = RFID.read(); // read
+
+     if(rfid == -1)
+     {
+      return; // no data is read 
+      }
+
+      if(rfid == 2)
+      {
+        id = 0; // start of the RFID frame
+      }
+      else if(rfid == 3)
+      {
+        extract_tag = true; // end of the RFID frame         
+      }
+
+      buffer[id++] = rfid;
+
+      if( extract_tag == true)
+      {
+       if(id == tag_size)
+       {
+         unsigned tag = extract_tagRFID(); // function call to get the ID of the RFID tag
+       }
+      }
   }
 }
+
+unsigned extract_tagRFID()
+{
+  uint8_t tag_head = buffer[0]; // first byte is head
+  uint8_t *tag_data = buffer + 1;
+  uint8_t *tag_data_version = tag_data ;
+  uint8_t *tag_data_tag = tag_data +2; // out of 10 bytes for data, first 2 are for version, remaining 8 is for ID 
+  uint8_t *tag_checksum = buffer + 11; // checksum is last 2 bytes, before the tail of the frame
+  uint8_t tag_tail = buffer[13]; // last byte is tail
+
+
+  Serial.print("Tag Head");
+  Serial.println(tag_head);
+
+  Serial.println("Tag Data");
+  for(int i = 0; i < tagversion_size; i++)
+  {
+   Serial.print(char(tag_data_version[i]));  
+  }
+  Serial.println("Tag data version");
+
+  for(int i = 0; i < tagdata_size; i++)
+  {
+    Serial.println(char(tag_data_tag[i]));
+  }
+  Serial.println("Tag data in RFID tag");
+
+  Serial.println("Tag checksum");
+  for(int i = 0; i < tag_checksum_size; i++ )
+  {
+    Serial.print(char(tag_checksum[i]));
+  }
+
+  Serial.println("Tag tail");
+  Serial.print(tag_tail);
+
+  long tag = hex_to_num(tag_data_tag, tagdata_size);
+  Serial.println("Extracted tag");
+  Serial.print(tag);
+
+  return tag;
+}
+
+long hex_to_num(char *str, unsigned int length)
+{
+ char* copy = malloc((sizeof(char) * length) + 1); 
+ memcpy(copy, str, sizeof(char) * length);
+ copy[length] = '\0';
+ long value = strtol(copy, NULL, 16); 
+ free(copy);
+ return value;  
+}
+  
