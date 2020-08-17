@@ -28,7 +28,7 @@ void setup() {
  uno.begin(9600); 
  ssrfid.listen(); 
  
- Serial.println("INIT DONE");
+ Serial.println("Reading Tag ID starts");
  t.every(500, interrupt, (void*)0);
 }
 
