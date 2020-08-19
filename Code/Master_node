@@ -10,12 +10,29 @@ void setup() {
 
 }
 
-char str;
+// The below code is for printing byte by byte
+
+/*char str;
 
 void loop() {
   if (mini.available() > 0 )
  {  
     str = mini.read();
     Serial.println(str); 
+ }
+}*/
+
+void loop() {
+  if (mini.available() > 0 )
+ {  
+    char data[255];
+    uint8_t k = 0;
+    data[k] = mini.read();
+    k++;
+   
+    for (int i = 0; i < k; i++) {
+        Serial.print(data[i]);
+        data [i] = '\0';
+    }
  }
 }
