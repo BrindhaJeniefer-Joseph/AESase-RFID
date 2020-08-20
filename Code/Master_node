@@ -58,13 +58,19 @@ void loop() {
           id = strtok(data, "Valid Tag:");
           if(id != NULL)
           {
+            bool flag = false;
             for (n=0 ; n<11 ; n++)
             {
             if ( (strncmp (validtags[n],id, 8)) == 0)
             {
               Serial.println("match success, open the door");
+              flag = true;
               }
 
+            }
+            if( flag == false)
+            {
+              Serial.println("unregistered user, keep the door closed");
             }
 
 
