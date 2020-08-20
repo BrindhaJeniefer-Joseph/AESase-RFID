@@ -33,3 +33,7 @@ Please refer the block diagram in AESase-RFID-Josephrexon/Architecture
     3. Digital pin 4 -> Tx (of RFID)  ----- Pin 4 of pro mini acts as input ( or receiver ) to receive RFID tag
     4. Digital pin 2 -> Rx( of RFID) 
     5. Antennas connected
+
+
+# Reference
+https://www.mschoeffler.de/2018/01/05/arduino-tutorial-how-to-use-the-rdm630-rdm6300-rfid-reader/
