@@ -1,12 +1,23 @@
 #include <SoftwareSerial.h>
+#include <Servo.h>
+#include <PWM.h>
+
+
+#define PwmPin 9
+int32_t frequency = 35;
+
 
 SoftwareSerial mini = SoftwareSerial(2, 4); //2-> Rx of uno, 4 -> Tx of uno
+Servo myservo;
 
 void setup() {
   Serial.begin(9600);
   mini.begin(9600);
   mini.listen();
   Serial.println("transmission starts");  
+  pinMode(PwmPin, OUTPUT);
+  InitTimersSafe();
+  myservo.attach(9);
 
 }
 
@@ -22,17 +33,55 @@ void loop() {
  }
 }*/
 
-void loop() {
-  if (mini.available() > 0 )
- {  
-    char data[255];
-    uint8_t k = 0;
+char data[255];
+uint8_t k = 0;
+
+char validtags[30][30] = {"004B86E9", "0010A0C9", "00A721FE", "004A6404", "00502E0A", "0064E6E9", "004A5D75", "00AAAB31", "0064E6B5","00AA8A2F" };
+int n;
+char * id;
+
+void loop() {  
+  if ( mini.available() > 0 )
+ {     
     data[k] = mini.read();
-    k++;
-   
-    for (int i = 0; i < k; i++) {
-        Serial.print(data[i]);
-        data [i] = '\0';
+    if( data[k] == '\n')
+    {
+        data[k+1] = '\0';
+        Serial.print(data);
+        k = 0;
+        if( strlen(data) == 8)
+        {
+          return;
+        }
+        if( strlen(data) == 20)
+        {
+          id = strtok(data, "Valid Tag:");
+          if(id != NULL)
+          {
+            for (n=0 ; n<11 ; n++)
+            {
+            if ( (strncmp (validtags[n],id, 8)) == 0)
+            {
+              Serial.println("match success, open the door");
+              }
+
+            }
+
+
+               // servo thing
+               /*bool success = SetPinFrequencySafe(PwmPin, frequency);
+               if(success) 
+               {
+                    pinMode(13, OUTPUT);
+                    digitalWrite(13, HIGH);    
+               }
+                 pwmWrite(PwmPin, brightness);*/
+           }
+         }
+      
     }
- }
+      else{
+    k++;}
+    
+   }
 }
