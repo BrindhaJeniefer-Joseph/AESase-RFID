@@ -65,23 +65,23 @@ void loop() {
             {
               Serial.println("match success, open the door");
               flag = true;
+              for(angle = 0; angle < 180; angle += 1) // servo motor control
+                  {
+                    myservo.write(angle);
+                    //pwmWrite(PwmPin,angle);
+                    delay(15);
+                  }
               }
 
             }
             if( flag == false)
             {
               Serial.println("unregistered user, keep the door closed");
+              myservo.write(angle);
+              //pwmWrite(PwmPin,angle);
             }
 
 
-               // servo thing
-               /*bool success = SetPinFrequencySafe(PwmPin, frequency);
-               if(success) 
-               {
-                    pinMode(13, OUTPUT);
-                    digitalWrite(13, HIGH);    
-               }
-                 pwmWrite(PwmPin, brightness);*/
            }
          }
       
