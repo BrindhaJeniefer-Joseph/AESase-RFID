@@ -1,14 +1,19 @@
 #include <SoftwareSerial.h>
 #include <Servo.h>
-#include <PWM.h>
+//#include <PWM.h>
+#include "Timer.h"
 
 
 #define PwmPin 9
+#define buzzerPin 4
 int32_t frequency = 35;
 
 
 SoftwareSerial mini = SoftwareSerial(2, 4); //2-> Rx of uno, 4 -> Tx of uno
 Servo myservo;
+Timer t;
+
+int angle = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -16,8 +21,10 @@ void setup() {
   mini.listen();
   Serial.println("transmission starts");  
   pinMode(PwmPin, OUTPUT);
-  InitTimersSafe();
+  //InitTimersSafe();
   myservo.attach(9);
+  pinMode( buzzerPin, OUTPUT);
+  t.every(5000, intruder_detection, (void*)0);
 
 }
 
@@ -33,6 +40,20 @@ void loop() {
  }
 }*/
 
+int intruder_detect ;
+
+void intruder_detection(void *context)
+{
+  if(intruder_detect < 5){
+   digitalWrite(buzzerPin, HIGH);
+   Serial.println("Slave is not alive, report the intrusion");
+  } 
+  else{
+  digitalWrite(buzzerPin, LOW);
+  }
+  intruder_detect = 0;
+}
+
 char data[255];
 uint8_t k = 0;
 
@@ -40,9 +61,11 @@ char validtags[30][30] = {"004B86E9", "0010A0C9", "00A721FE", "004A6404", "00502
 int n;
 char * id;
 
-void loop() {  
+void loop() { 
+  t.update();
   if ( mini.available() > 0 )
  {     
+    intruder_detect++;
     data[k] = mini.read();
     if( data[k] == '\n')
     {
@@ -51,6 +74,7 @@ void loop() {
         k = 0;
         if( strlen(data) == 8)
         {
+          myservo.write(0);
           return;
         }
         if( strlen(data) == 20)
@@ -65,12 +89,11 @@ void loop() {
             {
               Serial.println("match success, open the door");
               flag = true;
-              for(angle = 0; angle < 180; angle += 1) // servo motor control
-                  {
-                    myservo.write(angle);
+                  //for(angle = 0; angle < 180; angle += 1) // servo motor control
+                  //{
+              myservo.write(180);
                     //pwmWrite(PwmPin,angle);
-                    delay(15);
-                  }
+                    //}
               }
 
             }
