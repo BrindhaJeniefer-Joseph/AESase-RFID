@@ -65,10 +65,11 @@ void loop() {
   t.update();
   if ( mini.available() > 0 )
  {     
-    intruder_detect++;
+    
     data[k] = mini.read();
     if( data[k] == '\n')
     {
+        intruder_detect++;
         data[k+1] = '\0';
         Serial.print(data);
         k = 0;
