@@ -38,15 +38,17 @@ void interrupt(void *context)
   {
    uno.println(str);
    tag_valid = 0;
-   }
-   else{
+  }
+  else
+  {
     uno.println("no tag");
-    }
+  }
 }
 
 void loop() {
   t.update();
-  if (ssrfid.available() > 0){
+  if (ssrfid.available() > 0)
+    {
     bool call_extract_tag = false;
     
     int ssvalue = ssrfid.read(); // read 
