@@ -1,13 +1,10 @@
 #include <SoftwareSerial.h>
 #include <Servo.h>
-//#include <PWM.h>
 #include "Timer.h"
 
 
 #define PwmPin 9
 #define buzzerPin 4
-int32_t frequency = 35;
-
 
 SoftwareSerial mini = SoftwareSerial(2, 4); //2-> Rx of uno, 4 -> Tx of uno
 Servo myservo;
@@ -21,24 +18,11 @@ void setup() {
   mini.listen();
   Serial.println("transmission starts");  
   pinMode(PwmPin, OUTPUT);
-  //InitTimersSafe();
-  myservo.attach(9);
+  myservo.attach(PwmPin);
   pinMode( buzzerPin, OUTPUT);
   t.every(5000, intruder_detection, (void*)0);
 
 }
-
-// The below code is for printing byte by byte
-
-/*char str;
-
-void loop() {
-  if (mini.available() > 0 )
- {  
-    str = mini.read();
-    Serial.println(str); 
- }
-}*/
 
 int intruder_detect ;
 
@@ -90,19 +74,14 @@ void loop() {
             {
               Serial.println("match success, open the door");
               flag = true;
-                  //for(angle = 0; angle < 180; angle += 1) // servo motor control
-                  //{
               myservo.write(180);
-                    //pwmWrite(PwmPin,angle);
-                    //}
-              }
+            }
 
             }
             if( flag == false)
             {
               Serial.println("unregistered user, keep the door closed");
               myservo.write(angle);
-              //pwmWrite(PwmPin,angle);
             }
 
 
