@@ -24,11 +24,11 @@ void setup() {
 
 }
 
-int intruder_detect ;
+int intruder_detect;
 
 void intruder_detection(void *context)
 {
-  if(intruder_detect < 5){
+  if(intruder_detect < 5) {
    digitalWrite(buzzerPin, HIGH);
    Serial.println("Slave is not alive, report the intrusion");
   } 
@@ -47,50 +47,36 @@ char * id;
 
 void loop() { 
   t.update();
-  if ( mini.available() > 0 )
- {     
-    
+  if ( mini.available() > 0 ) {       
     data[k] = mini.read();
-    if( data[k] == '\n')
-    {
-        intruder_detect++;
-        data[k+1] = '\0';
-        Serial.print(data);
-        k = 0;
-        if( strlen(data) == 8)
-        {
-          myservo.write(0);
-          return;
-        }
-        if( strlen(data) == 20)
-        {
-          id = strtok(data, "Valid Tag:");
-          if(id != NULL)
-          {
-            bool flag = false;
-            for (n=0 ; n<11 ; n++)
-            {
-            if ( (strncmp (validtags[n],id, 8)) == 0)
-            {
+    if( data[k] == '\n') {
+      intruder_detect++;
+      data[k+1] = '\0';
+      Serial.print(data);
+      k = 0;
+      if( strlen(data) == 8) {
+        myservo.write(0);
+        return;
+       }
+      if( strlen(data) == 20) {
+        id = strtok(data, "Valid Tag:");
+        if(id != NULL) {
+          bool flag = false;
+          for (n=0 ; n<11 ; n++) {
+            if ( (strncmp (validtags[n],id, 8)) == 0)  {
               Serial.println("match success, open the door");
               flag = true;
               myservo.write(180);
             }
-
+          }
+          if( flag == false) {
+            Serial.println("unregistered user, keep the door closed");
+            myservo.write(angle);
             }
-            if( flag == false)
-            {
-              Serial.println("unregistered user, keep the door closed");
-              myservo.write(angle);
-            }
-
-
-           }
-         }
-      
+        }
+      }     
     }
-      else{
-    k++;}
-    
+    else{
+    k++;}    
    }
 }
