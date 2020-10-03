@@ -2,7 +2,7 @@
 
 Low Level Abstraction - RFID Access control system
 
-This project is to implement the automatic door access control to the registered users and to avoid intruder detection. Since this is low level abstraction, the main focus is on hardware and microcontroller coding. 
+This project is to implement the automatic door access control to the registered users and to identify intruder detection. Since this is low level abstraction, the main focus is on hardware and microcontroller coding. 
 
 # Architecture:
 
