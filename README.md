@@ -10,7 +10,7 @@ Please refer the block diagram in AESase-RFID-Josephrexon/Architecture
 
 # Prerequisites:
 1. RFID reader RDM6300
-2. Arduino pro mini ATMega 168, 3.3V, 8MHz
+2. Arduino pro mini ATMega 168, 5V, 8MHz
 3. Arduino uno
 4. Jumper wires
 5. USB to UART TTL converter ( to connect pro mini to PC )
